@@ -6,6 +6,10 @@ module Api
 
       def index
         @movies = Movie.all
+
+        @movies = @movies.where("title ILIKE ?", "%#{params[:title]}%") if params[:title].present?
+        @movies = @movies.where("genre ILIKE ?", "%#{params[:genre]}%") if params[:genre].present?
+
         render json: @movies
       end
 
