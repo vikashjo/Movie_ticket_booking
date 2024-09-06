@@ -16,7 +16,7 @@ module Api
       end
 
       def create
-        @showtime = @movie.showtimes&.create(showtime_params.merge(hall: set_hall))
+        @showtime = @movie.showtimes&.create(showtime_params)
         if @showtime.save 
           render json: { message: "Showtime is created", data: @showtime}
         else
@@ -43,7 +43,7 @@ module Api
       private
 
       def showtime_params
-        params.require(:showtime).permit(:start_time, :end_time)
+        params.require(:showtime).permit(:start_time, :end_time, :hall_id)
       end
 
       def set_showtime
