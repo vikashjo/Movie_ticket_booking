@@ -9,5 +9,5 @@ class Ticket < ApplicationRecord
   #   if Ticket.exists?(showtime_id: showtime_id, seat_number: seat_number)
   #     errors.add(:seat_number,"#{seat_number} is already booked, Please choose some other seat")
   #   end
-  end
+  # end
 end

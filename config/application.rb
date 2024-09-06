@@ -40,5 +40,12 @@ module MovieBooking
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_your_app_session'
+    config.time_zone = 'Asia/Kolkata'  # This corresponds to IST
+    config.active_record.default_timezone = :local
+
+
   end
 end

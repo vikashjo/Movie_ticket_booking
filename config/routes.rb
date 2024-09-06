@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
 
   namespace :api do
@@ -13,4 +15,6 @@ Rails.application.routes.draw do
       resources :showtimes, only: [:update, :destroy]
     end
   end
+  mount Sidekiq::Web => '/sidekiq'
 end
+

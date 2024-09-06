@@ -1,0 +1,4 @@
+reminder_emails:   # * * * * * : Min Hour Day month week
+  cron: "* 0 * * *"  # 00:00 am
+  class: "ReminderEmailJob"
+  queue: default
