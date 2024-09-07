@@ -5,4 +5,5 @@ class User < ApplicationRecord
 
   has_many :tickets
   has_many :showtimes, through: :tickets
+  has_many :reviews, dependent: :destroy
 end

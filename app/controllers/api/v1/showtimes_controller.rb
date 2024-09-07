@@ -7,8 +7,12 @@ module Api
       before_action :set_hall, only: [:create, :update, :destroy]
 
       def index
-        @showtime = @movie.showtimes
-        render json: @showtime
+        @showtimes = @movie.showtimes
+
+        @showtimes = @showtimes.where(start_time: params[:start_time]) if params[:start_time].present?
+        @showtimes = @showtimes.where(end_time: params[:end_time]) if params[:end_time].present?
+        
+        render json: @showtimes
       end
 
       def show
