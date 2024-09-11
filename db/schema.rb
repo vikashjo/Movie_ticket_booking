@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_07_082410) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_11_084543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -45,6 +45,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_07_082410) do
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
+  create_table "seats", force: :cascade do |t|
+    t.string "seat_number"
+    t.string "seat_type"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "hall_id"
+    t.index ["hall_id"], name: "index_seats_on_hall_id"
+  end
+
+  create_table "seats_showtimes", id: false, force: :cascade do |t|
+    t.bigint "seat_id", null: false
+    t.bigint "showtime_id", null: false
+  end
+
   create_table "showtimes", force: :cascade do |t|
     t.bigint "movie_id", null: false
     t.bigint "hall_id", null: false
@@ -59,9 +74,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_07_082410) do
   create_table "tickets", force: :cascade do |t|
     t.bigint "showtime_id", null: false
     t.bigint "user_id", null: false
-    t.integer "seat_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "seat_id"
+    t.index ["seat_id"], name: "index_tickets_on_seat_id"
     t.index ["showtime_id"], name: "index_tickets_on_showtime_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end
@@ -76,8 +92,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_07_082410) do
 
   add_foreign_key "reviews", "movies"
   add_foreign_key "reviews", "users"
+  add_foreign_key "seats", "halls"
   add_foreign_key "showtimes", "halls"
   add_foreign_key "showtimes", "movies"
+  add_foreign_key "tickets", "seats"
   add_foreign_key "tickets", "showtimes"
   add_foreign_key "tickets", "users"
 end

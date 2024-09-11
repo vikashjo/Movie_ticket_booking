@@ -2,5 +2,5 @@
 <p>Dear <%= @user.name %>,</p>
 <p>Your booking for the movie <%= @ticket.showtime.movie.title %> has been confirmed.</p>
 <p>Showtime: <%= @ticket.showtime.start_time.strftime('%B %d, %Y at %I:%M %p') %></p>
-<p>Seat Number: <%= @ticket.seat_number %></p>
+<p>Seat Number: <%= @ticket.seat.seat_number %>  : <%= @ticket.seat.seat_type %></p>
 <p>Thank you for booking with us!</p>

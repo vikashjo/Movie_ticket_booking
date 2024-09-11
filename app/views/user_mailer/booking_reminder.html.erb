@@ -3,5 +3,5 @@
 <p>Dear <%= @user.name %>,</p>
 <p>This is to remind you that yourbooked movie <%= @ticket.showtime.movie.title %> is schedule for today.</p>
 <p>Showtime: <%= @ticket.showtime.start_time.strftime('%B %d, %Y at %I:%M %p') %></p>
-<p>Seat Number: <%= @ticket.seat_number %></p>
+<p>Seat Number: <%= @ticket.seat.seat_number %> : <%= @ticket.seat.seat_type %></p>
 <p>Thank you for booking with us!</p>

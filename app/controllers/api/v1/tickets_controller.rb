@@ -9,32 +9,31 @@ module Api
       end
 
       def create
-
-      #   @ticket = @showtime.tickets.new(ticket_params.merge(user:current_user))
-      #   if @ticket.save
-      #     render json: {message: "Congratulations! tickets booked successfully", data: @ticket}
-      #   else
-      #     render json: { errors: @ticket.errors.full_messages }, status: :unprocessable_entity
-      #   end
-      # end
         
         ActiveRecord::Base.transaction do
-          @showtime.lock!
 
-          if Ticket.exists?(showtime_id: @showtime.id, seat_number: params[:ticket][:seat_number])
-            render json: { message: "Seat is already booked, Please choose some other seat"}, status: :unprocessable_entity
+          @seat = @showtime.seats.find_by(id: ticket_params[:seat_id], status: 'available')
+          if @seat.nil?
+            render json: {message: "Seat is not available, please choose another seat"}, status: :unprocessable_entity
           else
-            @ticket = @showtime.tickets.create!(ticket_params.merge(user:current_user))
-            render json: {message: "Congratulations! tickets booked successfully", data: @ticket}, status: :created
-            UserMailer.booking_confirmation(current_user, @ticket).deliver_later
-          end      
+            @seat.lock!
+
+            if Ticket.exists?(showtime_id: @showtime.id, seat_id: @seat.id)
+              render json: { message: "Seat is already booked, Please choose some other seat"}, status: :unprocessable_entity
+            else
+              @ticket = @showtime.tickets.create!(ticket_params.merge(user:current_user))
+              @seat.update!(status: 'booked')
+              render json: {message: "Congratulations! tickets booked successfully", data: @ticket.seat}, status: :created
+              UserMailer.booking_confirmation(current_user, @ticket).deliver_later
+            end     
+          end 
         end
+
       rescue ActiveRecord::StaleObjectError
         render json: { message: "The seat has been updated, please try booking again" }, status: :conflict
       rescue ActiveRecord::RecordInvalid => e
         render json: { message: e.message }, status: :unprocessable_entity
       end
-
 
       private
 
@@ -47,7 +46,7 @@ module Api
       end
 
       def ticket_params
-        params.require(:ticket).permit(:seat_number)
+        params.require(:ticket).permit(:seat_id)
       end
     end
   end

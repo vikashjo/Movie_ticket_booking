@@ -2,7 +2,7 @@ module Api
   module V1
     class ShowtimesController < ApplicationController
       before_action :authorize_admin, only: [:create, :update, :destroy]
-      before_action :set_showtime, only: [:update, :destroy]
+      before_action :set_showtime, only: [:update, :destroy, :show]
       before_action :set_movie, only: [:index, :create, :update, :destroy]
       before_action :set_hall, only: [:create, :update, :destroy]
 
@@ -16,11 +16,15 @@ module Api
       end
 
       def show
-
+        render json: @showtime
       end
 
       def create
         @showtime = @movie.showtimes&.create(showtime_params)
+        seats = Seat.where(hall: @showtime.hall)
+        seats.each do |seat|
+          seat.showtimes
+        end
         if @showtime.save 
           render json: { message: "Showtime is created", data: @showtime}
         else
