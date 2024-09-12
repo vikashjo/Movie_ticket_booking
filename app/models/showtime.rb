@@ -18,6 +18,16 @@ class Showtime < ApplicationRecord
     end
   end
 
+  def movie_time_type(showtime)
+    start_hour = showtime.start_time.hour
+  
+    if start_hour < 16  # 4 PM
+      'matinee'
+    else
+      'evening'
+    end
+  end
+
   private
 
   def end_time_after_start_time
