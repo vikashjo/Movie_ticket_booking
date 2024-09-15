@@ -4,6 +4,9 @@ Rails.application.routes.draw do
  
   namespace :api do
     namespace :v1 do
+      resources :webhooks, only: [:create]
+      resources :payments, only: [:create]
+      post 'payments/collect', to: 'payments#collect_payment_info'
       post 'login', to: "sessions#login"
       resources :users
       resources :halls
