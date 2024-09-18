@@ -46,6 +46,8 @@ module MovieBooking
     config.time_zone = 'Asia/Kolkata'  # This corresponds to IST
     config.active_record.default_timezone = :local
 
+    config.active_job.queue_adapter = :sidekiq
+
 
   end
 end

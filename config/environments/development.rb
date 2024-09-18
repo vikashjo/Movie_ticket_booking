@@ -11,6 +11,10 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
+  #credentials
+  config.credentials.content_path = 'config/credentials.yml.enc'
+  config.credentials.key_path = 'config/master.key'
+
   # Show full error reports.
   config.consider_all_requests_local = true
 

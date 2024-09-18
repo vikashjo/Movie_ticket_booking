@@ -1,5 +1,6 @@
 class ReviewReminderJob < ApplicationJob
   queue_as :default
+  include Sidekiq::Job
 
   def perform(showtime)
     showtime.tickets.each do |ticket|

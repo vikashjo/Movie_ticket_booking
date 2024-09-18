@@ -9,10 +9,13 @@ module Api
       end
 
       def create
-        
         ActiveRecord::Base.transaction do
-
-          @seat = @showtime.seats.find_by(id: ticket_params[:seat_id], status: 'available')
+          if current_user.premium?
+            @seat = @showtime.seats.find_by(id: ticket_params[:seat_id], status: 'available')
+          else
+            sleep(1)
+            @seat = @showtime.seats.find_by(id: ticket_params[:seat_id], status: 'available')
+          end
           
           if @seat.nil?
             render json: {message: "Seat is not available, please choose another seat"}, status: :unprocessable_entity

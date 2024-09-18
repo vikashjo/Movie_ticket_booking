@@ -8,7 +8,8 @@ Rails.application.routes.draw do
       resources :payments, only: [:create]
       post 'payments/collect', to: 'payments#collect_payment_info'
       post 'login', to: "sessions#login"
-      resources :users
+      resources :users, only: [:index, :create]
+      get 'users/:identifier', to: 'users#search', constraints: { identifier: /[^\/]+/ }
       resources :halls
       resources :movies do
         resources :reviews, only: [:index, :create]

@@ -31,7 +31,7 @@ class ApplicationController < ActionController::API
   end
  
   def decode_error
-    render json: { decode_error: 'decode error' }
+    render json: { decode_error: 'decode error ba', errors: error.full_messages }
   end
 
 end

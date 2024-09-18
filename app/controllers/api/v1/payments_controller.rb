@@ -5,7 +5,7 @@ class Api::V1::PaymentsController < ApplicationController
       amount = ticket.price
 
       payment_intent = Stripe::PaymentIntent.create({
-        amount: amount * 100,
+        amount: (amount * 100).to_i,
         currency: 'inr',
         metadata: { ticket_id: ticket.id },
         automatic_payment_methods: {

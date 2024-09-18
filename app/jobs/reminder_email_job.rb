@@ -1,5 +1,6 @@
 class ReminderEmailJob < ApplicationJob
   queue_as :default
+  include Sidekiq::Job
 
   def perform(*args)
     today = Time.current.in_time_zone('Asia/Kolkata').to_date

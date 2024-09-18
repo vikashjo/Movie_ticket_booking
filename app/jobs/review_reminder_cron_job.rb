@@ -1,5 +1,6 @@
 class ReviewReminderCronJob < ApplicationJob
   queue_as :default
+  include Sidekiq::Job
 
   def perform
     # Find all showtimes that ended today
