@@ -4,6 +4,20 @@ module Api
       before_action :authorize_admin, only: [:create, :update, :destroy]
       before_action :set_movie, only: [:show, :update, :destroy]
 
+      def export_csv
+        movies = Movie.all
+
+        csv_data = CSV.generate(headers:true) do |csv|
+          csv << ["ID", "TITLE", "DESCRIPTION", "DURATION", "LANGUAGE", "GENRE", "CAST", "DIRECTOR"]
+
+          movies.each do |movie|
+            csv << [movie.id, movie.title, movie.description, movie.duration, movie.language, movie.genre, movie.cast, movie.director]
+          end
+        end
+
+        send_data csv_data, filename: "movies-#{Date.today}.csv", type: 'text/csv'
+      end
+
       def index
         @movies = Movie.all
 

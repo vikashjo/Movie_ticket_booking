@@ -1,8 +1,28 @@
+require 'csv'
 module Api 
   module V1
     class HallsController < ApplicationController
-      before_action :authorize_admin, only: [:create, :update, :destroy]
+      before_action :authorize_admin, only: [:create, :update, :destroy, :import_csv]
       before_action :set_hall, only: [:update, :destroy, :show]
+
+      def import_csv
+        file = params[:file]
+
+        unless file
+          render json: { error: "Please provide a CSV file" }, status: :unprocessable_entity
+        end
+
+        CSV.foreach(file.path, headers: true) do |row|
+          Hall.create!(
+            name: row["Name"],
+            capacity: row["Capacity"]
+          )
+        end
+
+        render json: { message: "CSV imported successfully" }, status: :ok
+      rescue => e
+        render json: { error: "Failed to import CSV: #{e.message}" }, status: :unprocessable_entity
+      end
 
       def index
         @halls = Hall.all

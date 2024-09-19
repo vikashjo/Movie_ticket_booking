@@ -10,13 +10,18 @@ Rails.application.routes.draw do
       post 'login', to: "sessions#login"
       resources :users, only: [:index, :create]
       get 'users/:identifier', to: 'users#search', constraints: { identifier: /[^\/]+/ }
-      resources :halls
+      resources :halls do 
+        collection do
+          post 'import_csv'
+        end
+      end 
       resources :movies do
         resources :reviews, only: [:index, :create]
         resources :showtimes, only: [:index, :create, :show] do
           resources :tickets, only: [:index, :create]
           resources :seats, only: [:index, :show]
         end
+        collection { get 'export_csv'}
       end
       resources :showtimes, only: [:update, :destroy]
       resources :reviews, only: [:update, :destroy]
