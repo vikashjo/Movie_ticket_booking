@@ -27,11 +27,18 @@ module Api
 
       def create
         @user = User.new(user_params)
+        @user.active = true
         if @user.save
           render json: { message: "User is created", data: @user}
         else
           render json: { message: "User not created", data: @user.errors}
         end
+      end
+
+      def destroy
+        user = User.find(params[:id])
+        user.update!(active: false)                       # soft delete
+        render json: { message: "User is successfully deactivated" } 
       end
 
       private
